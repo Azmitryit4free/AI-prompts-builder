@@ -5,1021 +5,1022 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Prompt Builder Pro</title>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  :root{
-    --bg:#ffffff;--bg2:#f7f7f8;--bg3:#f0f0f2;
-    --text:#111111;--text2:#555560;--text3:#9090a0;
-    --border:#e0e0e8;--border2:#c8c8d8;
-    --info-bg:#eff6ff;--info-text:#1d6fcf;--info-border:#bfdbfe;
-    --success-bg:#f0fdf4;--success-text:#166534;--success-border:#bbf7d0;
-    --warn-bg:#fffbeb;--warn-text:#92400e;--warn-border:#fde68a;
-    --danger-bg:#fff1f2;--danger-text:#9f1239;--danger-border:#fecdd3;
-    --accent:#4f6ef7;--radius:8px;--radius-lg:12px;
-  }
-  @media(prefers-color-scheme:dark){:root{
-    --bg:#1a1a1e;--bg2:#25252a;--bg3:#2f2f36;
-    --text:#f0f0f5;--text2:#a0a0b0;--text3:#606070;
-    --border:#38383f;--border2:#4a4a55;
-    --info-bg:#0d1f3a;--info-text:#60a5fa;--info-border:#1e3a5f;
-    --success-bg:#0a1f12;--success-text:#4ade80;--success-border:#14532d;
-    --warn-bg:#1c1005;--warn-text:#fbbf24;--warn-border:#78350f;
-    --danger-bg:#1f0a0d;--danger-text:#fb7185;--danger-border:#881337;
-    --accent:#6b84fa;
-  }}
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;padding:24px 16px}
-  .container{max-width:900px;margin:0 auto}
-  .app-card{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:20px}
-  .app-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap}
-  .app-title{font-size:22px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:10px}
-  .app-title span{font-size:26px}
-  .app-sub{font-size:13px;color:var(--text3);margin-top:4px}
-  .badge{display:inline-block;font-size:11px;font-weight:500;padding:3px 10px;border-radius:99px}
-  .badge-info{background:var(--info-bg);color:var(--info-text);border:1px solid var(--info-border)}
-  .badge-warn{background:var(--warn-bg);color:var(--warn-text);border:1px solid var(--warn-border)}
-  .badge-success{background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border)}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f7f7f8;--bg3:#f0f0f2;
+  --text:#111111;--text2:#555560;--text3:#9090a0;
+  --border:#e0e0e8;--border2:#c8c8d8;
+  --info-bg:#eff6ff;--info-text:#1d6fcf;--info-border:#bfdbfe;
+  --success-bg:#f0fdf4;--success-text:#166534;--success-border:#bbf7d0;
+  --warn-bg:#fffbeb;--warn-text:#92400e;--warn-border:#fde68a;
+  --danger-bg:#fff1f2;--danger-text:#9f1239;--danger-border:#fecdd3;
+  --accent:#4f6ef7;--r:8px;--rl:12px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1a1a1e;--bg2:#25252a;--bg3:#2f2f36;
+  --text:#f0f0f5;--text2:#a0a0b0;--text3:#606070;
+  --border:#38383f;--border2:#4a4a55;
+  --info-bg:#0d1f3a;--info-text:#60a5fa;--info-border:#1e3a5f;
+  --success-bg:#0a1f12;--success-text:#4ade80;--success-border:#14532d;
+  --warn-bg:#1c1005;--warn-text:#fbbf24;--warn-border:#78350f;
+  --danger-bg:#1f0a0d;--danger-text:#fb7185;--danger-border:#881337;
+  --accent:#6b84fa;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;padding:20px 16px}
+.container{max-width:940px;margin:0 auto}
+.card{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px}
 
-  /* Mode buttons */
-  .mode-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
-  .mode-btn{padding:14px 16px;border:2px solid var(--border);border-radius:var(--radius-lg);background:var(--bg);cursor:pointer;font-size:15px;font-weight:500;color:var(--text2);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:10px}
-  .mode-btn .icon{font-size:24px}
-  .mode-btn.active{border-color:var(--accent);color:var(--accent);background:var(--info-bg)}
-  .mode-btn:hover:not(.active){border-color:var(--border2);color:var(--text)}
+/* Header */
+.hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.title{font-size:22px;font-weight:600;display:flex;align-items:center;gap:10px}
+.title .icon{font-size:26px}
+.subtitle{font-size:13px;color:var(--text3);margin-top:3px}
+.badge{display:inline-block;font-size:11px;font-weight:500;padding:3px 10px;border-radius:99px;background:var(--info-bg);color:var(--info-text);border:1px solid var(--info-border)}
 
-  /* Model pills */
-  .model-section{margin-bottom:24px}
-  .model-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-  .model-pill{padding:6px 14px;border:1px solid var(--border);border-radius:99px;background:var(--bg);cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);transition:all .12s}
-  .model-pill.active{border-color:var(--accent);color:var(--accent);background:var(--info-bg)}
-  .model-pill:hover:not(.active){background:var(--bg2);color:var(--text)}
-  .model-pill[data-type="video"]{border-color:var(--warn-border);color:var(--warn-text)}
-  .model-pill[data-type="video"].active{background:var(--warn-bg)}
+/* Tabs */
+.tabs{display:flex;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:20px}
+.tab{flex:1;padding:11px 8px;font-size:13px;font-weight:500;color:var(--text2);background:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .12s}
+.tab:not(:last-child){border-right:1px solid var(--border)}
+.tab.active{background:var(--info-bg);color:var(--info-text)}
+.tab:hover:not(.active){background:var(--bg2);color:var(--text)}
 
-  /* Section headers */
-  .sec{margin-bottom:20px}
-  .sec-head{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
-  .sec-label{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
-  .sec-tip{font-size:11px;color:var(--text3);margin-left:auto}
+/* Step rows */
+.step-row{display:flex;align-items:center;gap:9px;margin:16px 0 10px}
+.step-n{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em}
+.step-tip{font-size:11px;color:var(--text3);margin-left:auto}
 
-  /* Progress */
-  .progress-wrap{margin-bottom:20px}
-  .progress-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--text3);margin-bottom:6px}
-  .progress-bar{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden}
-  .progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .3s ease}
+/* Mode buttons */
+.mode-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.mbtn{padding:13px;border:2px solid var(--border);border-radius:var(--rl);background:var(--bg);cursor:pointer;font-size:14px;font-weight:500;color:var(--text2);display:flex;align-items:center;justify-content:center;gap:9px;transition:all .12s}
+.mbtn .ico{font-size:22px}
+.mbtn.active{border-color:var(--accent);color:var(--accent);background:var(--info-bg)}
+.mbtn:hover:not(.active){border-color:var(--border2);color:var(--text)}
 
-  /* Grid */
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-  .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+/* Model pills */
+.mpills{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.mpill{padding:5px 13px;border:1px solid var(--border);border-radius:99px;background:var(--bg);cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);transition:all .12s}
+.mpill.active{border-color:var(--accent);color:var(--accent);background:var(--info-bg)}
+.mpill:hover:not(.active){background:var(--bg2);color:var(--text)}
 
-  /* Fields */
-  .field{display:flex;flex-direction:column;gap:5px}
-  .field label{font-size:12px;font-weight:600;color:var(--text2);display:flex;align-items:center;gap:4px}
-  .field label .hint{font-size:11px;font-weight:400;color:var(--text3)}
-  .field select{width:100%;padding:8px 10px;font-size:13px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);color:var(--text);cursor:pointer;transition:border-color .12s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
-  .field select:focus{outline:none;border-color:var(--accent)}
-  .field select.filled{border-color:#4ade80;color:var(--text)}
+/* Progress */
+.prog-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--text3);margin-bottom:5px}
+.prog-bar{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-bottom:16px}
+.prog-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .3s}
 
-  /* Video only badge */
-  .video-only{display:none}
-  .video-mode .video-only{display:block}
+/* Section headers */
+.sh{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin:16px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px}
+.sh .ico{font-size:15px}
 
-  /* Prompt output */
-  .prompt-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-top:4px}
-  .prompt-label{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
-  .prompt-label .icon{font-size:16px}
-  textarea{width:100%;padding:12px;font-size:13px;line-height:1.7;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);color:var(--text);resize:vertical;font-family:inherit;transition:border-color .12s}
-  textarea:focus{outline:none;border-color:var(--accent)}
-  .neg-ta{border-color:var(--danger-border)!important}
-  .neg-ta:focus{border-color:var(--danger-text)!important}
-  .char-count{font-size:11px;color:var(--text3);text-align:right;margin-top:4px}
+/* Grids */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:11px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:11px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 
-  /* Suffix box */
-  .suffix-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;margin-top:12px}
-  .suffix-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
-  .suffix-text{font-size:12px;color:var(--text2);font-family:monospace;line-height:1.6;word-break:break-all}
+/* Fields */
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;font-weight:600;color:var(--text2)}
+.field label .hint{font-size:11px;font-weight:400;color:var(--text3)}
+select{width:100%;padding:8px 28px 8px 10px;font-size:13px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;transition:border-color .12s}
+select:focus{outline:none;border-color:var(--accent)}
+select.filled{border-color:#22c55e}
 
-  /* Action buttons */
-  .action-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-  .abtn{padding:7px 14px;font-size:13px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:500;transition:all .12s;text-decoration:none}
-  .abtn:hover{background:var(--bg2);color:var(--text);border-color:var(--border2)}
-  .abtn-info{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border)}
-  .abtn-info:hover{opacity:.85}
-  .abtn-success{background:var(--success-bg);color:var(--success-text);border-color:var(--success-border)}
-  .abtn-success:hover{opacity:.85}
-  .abtn-warn{background:var(--warn-bg);color:var(--warn-text);border-color:var(--warn-border)}
-  .abtn-warn:hover{opacity:.85}
-  .abtn-danger{background:var(--danger-bg);color:var(--danger-text);border-color:var(--danger-border)}
+/* Divider */
+.div{height:1px;background:var(--border);margin:20px 0}
 
-  /* Saved prompts */
-  .saved-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
-  .saved-item{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;display:flex;align-items:flex-start;gap:10px;cursor:pointer;transition:border-color .12s}
-  .saved-item:hover{border-color:var(--border2)}
-  .saved-meta{font-size:11px;color:var(--text3);margin-bottom:3px}
-  .saved-text{font-size:12px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:700px}
-  .saved-del{background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;padding:0;flex-shrink:0;line-height:1}
-  .saved-del:hover{color:var(--danger-text)}
-  .empty-saved{font-size:13px;color:var(--text3);font-style:italic;padding:8px 0}
+/* Prompt output card */
+.pcard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:18px;margin-top:4px}
+.plabel{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:7px;display:flex;align-items:center;gap:6px}
+textarea{width:100%;padding:10px 12px;font-size:13px;line-height:1.7;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);resize:vertical;font-family:inherit;transition:border-color .12s}
+textarea:focus{outline:none;border-color:var(--accent)}
+.neg-ta{border-color:var(--danger-border)!important}
+.char-c{font-size:11px;color:var(--text3);text-align:right;margin-top:4px}
 
-  /* Tips grid */
-  .tips-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:12px}
-  .tip-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px}
-  .tip-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px}
-  .tip-body{font-size:12px;color:var(--text2);line-height:1.55}
-  .tip-icon{font-size:18px;margin-bottom:6px}
+/* Suffix box */
+.sfx-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;margin-top:12px}
+.sfx-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.sfx-val{font-size:12px;color:var(--text2);font-family:'Courier New',monospace;line-height:1.6;word-break:break-all}
 
-  /* Section divider */
-  .divider{height:1px;background:var(--border);margin:24px 0}
+/* Action buttons */
+.ar{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.ab{padding:7px 14px;font-size:13px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:500;transition:all .12s}
+.ab:hover{background:var(--bg2);color:var(--text);border-color:var(--border2)}
+.ab-info{background:var(--info-bg);color:var(--info-text);border-color:var(--info-border)}
+.ab-success{background:var(--success-bg);color:var(--success-text);border-color:var(--success-border)}
+.ab-warn{background:var(--warn-bg);color:var(--warn-text);border-color:var(--warn-border)}
+.ab-danger{background:var(--danger-bg);color:var(--danger-text);border-color:var(--danger-border)}
 
-  /* Step badge */
-  .step-badge{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+/* Video badge */
+.vid-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--warn-bg);color:var(--warn-text);border:1px solid var(--warn-border);margin-left:8px}
 
-  @media(max-width:600px){
-    .mode-row{grid-template-columns:1fr 1fr}
-    .app-card{padding:18px}
-    body{padding:12px 10px}
-    .grid,.grid-3{grid-template-columns:1fr 1fr}
-  }
-  @media(max-width:420px){
-    .grid,.grid-3{grid-template-columns:1fr}
-  }
+/* Upload */
+.upload-zone{border:2px dashed var(--border);border-radius:var(--rl);padding:2rem;text-align:center;cursor:pointer;background:var(--bg2);position:relative;transition:all .15s}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:var(--info-bg)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:40px;margin-bottom:10px}
+.upload-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
+.upload-sub{font-size:12px;color:var(--text3)}
+.preview-wrap{position:relative;margin-bottom:16px}
+.preview-img{width:100%;max-height:300px;object-fit:contain;border-radius:var(--rl);border:1px solid var(--border);display:block}
+.rm-btn{position:absolute;top:8px;right:8px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:5px 10px;font-size:12px;cursor:pointer;color:var(--text2);display:flex;align-items:center;gap:5px}
+.rm-btn:hover{color:var(--danger-text);border-color:var(--danger-border)}
+
+/* Style pills for image */
+.spills{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.spill{padding:5px 12px;border:1px solid var(--border);border-radius:99px;font-size:12px;cursor:pointer;background:var(--bg);color:var(--text2);transition:all .12s}
+.spill.active{border-color:var(--accent);background:var(--info-bg);color:var(--info-text)}
+.spill:hover:not(.active){background:var(--bg2)}
+
+/* Analyze button */
+.ana-btn{width:100%;padding:12px;font-size:14px;font-weight:600;background:var(--info-bg);color:var(--info-text);border:1px solid var(--info-border);border-radius:var(--rl);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:opacity .12s;margin-bottom:14px}
+.ana-btn:hover{opacity:.85}
+.ana-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Loading bar */
+.lb{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-bottom:14px;display:none}
+.lf{height:100%;background:var(--accent);border-radius:2px;animation:lp 1.5s ease-in-out infinite}
+@keyframes lp{0%{width:0}50%{width:70%}100%{width:90%}}
+
+/* Error box */
+.err{background:var(--danger-bg);border:1px solid var(--danger-border);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--danger-text);margin-bottom:14px;display:none}
+
+/* Result card */
+.rcard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:14px;display:none}
+
+/* Saved list */
+.saved-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.si{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;display:flex;align-items:flex-start;gap:9px;cursor:pointer;transition:border-color .12s}
+.si:hover{border-color:var(--border2)}
+.si-meta{font-size:11px;color:var(--text3);margin-bottom:3px}
+.si-text{font-size:12px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sdel{background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;padding:0;flex-shrink:0;line-height:1}
+.sdel:hover{color:var(--danger-text)}
+.empty-msg{font-size:13px;color:var(--text3);font-style:italic;padding:8px 0}
+
+/* Tips grid */
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:12px}
+.tip{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px}
+.tip-icon{font-size:20px;margin-bottom:6px}
+.tip-t{font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px}
+.tip-b{font-size:12px;color:var(--text2);line-height:1.55}
+
+/* Note box */
+.note{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:16px;padding:11px 14px;background:var(--bg2);border-radius:var(--r);border-left:3px solid var(--accent)}
+
+/* Footer */
+.footer{text-align:center;font-size:12px;color:var(--text3);padding:16px 0 4px;border-top:1px solid var(--border);margin-top:8px}
+
+@media(max-width:640px){
+  .mode-row{grid-template-columns:1fr 1fr}
+  .grid,.grid3,.grid2{grid-template-columns:1fr 1fr}
+  .card{padding:16px}
+  body{padding:12px 10px}
+}
+@media(max-width:400px){
+  .grid,.grid3,.grid2{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 <div class="container">
+<div class="card">
 
-  <div class="app-card">
-    <div class="app-header">
-      <div>
-        <div class="app-title"><span>🪄</span> AI Prompt Builder Pro</div>
-        <div class="app-sub">Build perfect prompts for any AI image or video generator — beginner friendly · 35+ options</div>
-      </div>
-      <span class="badge badge-info">Free Tool</span>
+  <!-- HEADER -->
+  <div class="hdr">
+    <div>
+      <div class="title"><span class="icon">🪄</span> AI Prompt Builder Pro</div>
+      <div class="subtitle">Upload a photo · build manually · generate perfect prompts for any AI image or video tool</div>
+    </div>
+    <span class="badge">✨ Free Tool</span>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" id="t0" onclick="sw(0)">📷 Image analysis</button>
+    <button class="tab" id="t1" onclick="sw(1)">🎛️ Manual builder</button>
+    <button class="tab" id="t2" onclick="sw(2)">🔖 Saved <span id="sc"></span></button>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 0: IMAGE ANALYSIS
+  ══════════════════════════════════ -->
+  <div id="p0">
+    <div class="note">
+      <strong>How it works:</strong> Upload any photo — your selfie, a place, a style you love. Claude analyzes it and writes a detailed prompt so you can recreate or transform it in Midjourney, DALL·E, Firefly, Stable Diffusion, and more.
     </div>
 
-    <!-- STEP 1: MODE -->
-    <div class="sec">
-      <div class="sec-head">
-        <span class="step-badge">1</span>
-        <span class="sec-label">Choose mode</span>
-      </div>
-      <div class="mode-row">
-        <button class="mode-btn active" id="btn-image" onclick="setMode('image')">
-          <span class="icon">🖼️</span> Image generation
-        </button>
-        <button class="mode-btn" id="btn-video" onclick="setMode('video')">
-          <span class="icon">🎬</span> Video generation
-        </button>
-      </div>
-    </div>
-
-    <!-- STEP 2: MODEL -->
-    <div class="sec model-section">
-      <div class="sec-head">
-        <span class="step-badge">2</span>
-        <span class="sec-label">Target AI model</span>
-        <span class="sec-tip">Prompt style & suffix adapts per model</span>
-      </div>
-      <div class="model-pills" id="model-pills">
-        <button class="model-pill active" data-type="both" onclick="setModel(this,'general')">General</button>
-        <button class="model-pill" data-type="image" onclick="setModel(this,'midjourney')">Midjourney</button>
-        <button class="model-pill" data-type="image" onclick="setModel(this,'dalle')">DALL·E 3</button>
-        <button class="model-pill" data-type="image" onclick="setModel(this,'firefly')">Adobe Firefly</button>
-        <button class="model-pill" data-type="image" onclick="setModel(this,'sdxl')">Stable Diffusion</button>
-        <button class="model-pill" data-type="image" onclick="setModel(this,'ideogram')">Ideogram</button>
-        <button class="model-pill" data-type="image" onclick="setModel(this,'flux')">Flux</button>
-        <button class="model-pill" data-type="image" onclick="setModel(this,'leonardo')">Leonardo AI</button>
-        <button class="model-pill" data-type="video" onclick="setModel(this,'runway')">Runway Gen-3</button>
-        <button class="model-pill" data-type="video" onclick="setModel(this,'sora')">Sora</button>
-        <button class="model-pill" data-type="video" onclick="setModel(this,'kling')">Kling AI</button>
-        <button class="model-pill" data-type="video" onclick="setModel(this,'pika')">Pika Labs</button>
-        <button class="model-pill" data-type="video" onclick="setModel(this,'luma')">Luma Dream</button>
+    <!-- Upload area -->
+    <div id="ua">
+      <div class="upload-zone" id="dz">
+        <input type="file" accept="image/*" id="fi" onchange="handleFile(this.files[0])">
+        <div class="upload-icon">📤</div>
+        <div class="upload-title">Drop your image here or click to browse</div>
+        <div class="upload-sub">Supports JPG, PNG, WEBP — max 10MB</div>
       </div>
     </div>
 
-    <!-- STEP 3: DROPDOWNS -->
-    <div class="sec">
-      <div class="sec-head">
-        <span class="step-badge">3</span>
-        <span class="sec-label">Build your prompt</span>
-        <span class="sec-tip" id="prog-text">0 of 35 selected</span>
-      </div>
-      <div class="progress-wrap">
-        <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    <!-- After upload -->
+    <div id="pa" style="display:none">
+      <div class="preview-wrap">
+        <img id="pi" class="preview-img" alt="Uploaded image preview">
+        <button class="rm-btn" onclick="removeImg()">✕ Remove</button>
       </div>
 
-      <!-- Subject & Scene -->
-      <div class="sec-head" style="margin-top:16px"><span class="sec-label">📍 Subject &amp; scene</span><span class="sec-tip">Who/what and where</span></div>
-      <div class="grid">
-        <div class="field">
-          <label>Main subject <span class="hint">— who or what</span></label>
-          <select id="subject" onchange="build()">
-            <option value="">— choose a subject —</option>
-            <option>A portrait of a person</option>
-            <option>A group of people</option>
-            <option>A futuristic cityscape</option>
-            <option>A serene natural landscape</option>
-            <option>An animal in the wild</option>
-            <option>An abstract concept</option>
-            <option>A fantasy creature</option>
-            <option>An architectural structure</option>
-            <option>A still life composition</option>
-            <option>A sci-fi scene</option>
-            <option>A historical scene</option>
-            <option>An underwater world</option>
-            <option>A cosmic / space scene</option>
-            <option>A close-up food dish</option>
-            <option>A vehicle or transport</option>
-            <option>A robot or AI entity</option>
-            <option>A magical object</option>
-            <option>A natural disaster scene</option>
-            <option>A child playing</option>
-            <option>An elderly person, portrait</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Setting / environment <span class="hint">— where</span></label>
-          <select id="setting" onchange="build()">
-            <option value="">— choose a setting —</option>
-            <option>Dense urban city street</option>
-            <option>Misty mountain valley</option>
-            <option>Tropical beach at sunset</option>
-            <option>Dark enchanted forest</option>
-            <option>Futuristic space station</option>
-            <option>Ancient ruins</option>
-            <option>Minimalist white studio</option>
-            <option>Underground cave with crystals</option>
-            <option>Floating sky islands</option>
-            <option>Snowy tundra wilderness</option>
-            <option>Cyberpunk alleyway</option>
-            <option>Lush countryside meadow</option>
-            <option>Desert sand dunes</option>
-            <option>Medieval castle interior</option>
-            <option>Underwater coral reef</option>
-            <option>Volcanic landscape</option>
-            <option>Cherry blossom garden</option>
-            <option>Rooftop terrace at night</option>
-            <option>Deep jungle canopy</option>
-            <option>Arctic ice shelf</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Time of day</label>
-          <select id="timeofday" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Golden hour (just after sunrise)</option>
-            <option>Midday bright sun</option>
-            <option>Late afternoon warmth</option>
-            <option>Blue hour (twilight)</option>
-            <option>Vivid sunset</option>
-            <option>Night with full moon</option>
-            <option>Overcast diffused daylight</option>
-            <option>Pre-dawn darkness</option>
-            <option>Stormy midday</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Season</label>
-          <select id="season" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Spring — fresh greens and blossoms</option>
-            <option>Summer — lush and vivid</option>
-            <option>Autumn — amber and crimson foliage</option>
-            <option>Winter — bare and snow-covered</option>
-            <option>Dry season — parched earth</option>
-            <option>Monsoon — heavy rain and mist</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Weather / atmosphere</label>
-          <select id="weather" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Clear and sunny</option>
-            <option>Heavy rain with puddles</option>
-            <option>Dense fog</option>
-            <option>Thunderstorm with lightning</option>
-            <option>Light snow flurries</option>
-            <option>Blizzard</option>
-            <option>Windy with swirling dust</option>
-            <option>After rain, wet surfaces</option>
-            <option>Heat haze shimmer</option>
-            <option>Dramatic storm clouds gathering</option>
-            <option>Rainbow after rain</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Subject action / expression</label>
-          <select id="action" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Standing still, commanding pose</option>
-            <option>In motion, dynamic energy</option>
-            <option>Looking directly at camera</option>
-            <option>Looking away, contemplative</option>
-            <option>Laughing, joyful expression</option>
-            <option>Intense focused expression</option>
-            <option>Mysterious, face in shadow</option>
-            <option>Running through environment</option>
-            <option>Seated, relaxed posture</option>
-            <option>Mid-leap, airborne</option>
-            <option>Interacting with environment</option>
-          </select>
-        </div>
+      <div class="sh"><span class="ico">🎨</span> What do you want to do with this image?</div>
+      <div class="spills">
+        <button class="spill active" onclick="setP(this,'recreate')">Recreate as-is</button>
+        <button class="spill" onclick="setP(this,'portrait')">AI portrait</button>
+        <button class="spill" onclick="setP(this,'anime')">Anime / illustration</button>
+        <button class="spill" onclick="setP(this,'cinematic')">Cinematic look</button>
+        <button class="spill" onclick="setP(this,'painting')">Oil painting</button>
+        <button class="spill" onclick="setP(this,'fantasy')">Fantasy / magical</button>
+        <button class="spill" onclick="setP(this,'scifi')">Sci-fi / futuristic</button>
+        <button class="spill" onclick="setP(this,'vintage')">Vintage / retro</button>
+        <button class="spill" onclick="setP(this,'headshot')">Professional headshot</button>
+        <button class="spill" onclick="setP(this,'cartoon')">Cartoon / comic</button>
+        <button class="spill" onclick="setP(this,'3d')">3D render</button>
+        <button class="spill" onclick="setP(this,'watercolor')">Watercolor art</button>
       </div>
 
-      <!-- Style & Art Direction -->
-      <div class="sec-head" style="margin-top:20px"><span class="sec-label">🎨 Style &amp; art direction</span><span class="sec-tip">The overall visual look</span></div>
-      <div class="grid">
-        <div class="field">
-          <label>Art style</label>
-          <select id="artstyle" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Photorealistic</option>
-            <option>Cinematic film still</option>
-            <option>Oil painting</option>
-            <option>Watercolor illustration</option>
-            <option>Concept art</option>
-            <option>Anime / manga</option>
-            <option>Comic book / graphic novel</option>
-            <option>3D render (Octane)</option>
-            <option>Pencil sketch</option>
-            <option>Digital painting</option>
-            <option>Impressionist</option>
-            <option>Surrealist / dreamlike</option>
-            <option>Flat vector illustration</option>
-            <option>Pixel art (8-bit)</option>
-            <option>Neon glitch art</option>
-            <option>Charcoal drawing</option>
-            <option>Linocut / woodblock print</option>
-            <option>Retro vintage poster</option>
-            <option>Ink wash painting (sumi-e)</option>
-            <option>Stained glass style</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Color palette</label>
-          <select id="palette" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Warm earth tones</option>
-            <option>Cool blues and purples</option>
-            <option>Vibrant neon colors</option>
-            <option>Monochromatic black and white</option>
-            <option>Pastel soft tones</option>
-            <option>Desaturated cinematic</option>
-            <option>High contrast vivid</option>
-            <option>Warm sunset analogous hues</option>
-            <option>Teal and orange (Hollywood grade)</option>
-            <option>Muted vintage tones</option>
-            <option>Complementary color contrast</option>
-            <option>Triadic bold palette</option>
-            <option>Duotone (two-color)</option>
-            <option>Jewel tones (deep rich colors)</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Mood / emotion</label>
-          <select id="mood" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Epic and powerful</option>
-            <option>Mysterious and eerie</option>
-            <option>Peaceful and serene</option>
-            <option>Romantic and warm</option>
-            <option>Dark and brooding</option>
-            <option>Whimsical and playful</option>
-            <option>Tense and dramatic</option>
-            <option>Joyful and vibrant</option>
-            <option>Melancholic and longing</option>
-            <option>Awe-inspiring and grand</option>
-            <option>Nostalgic and bittersweet</option>
-            <option>Unsettling and surreal</option>
-            <option>Hopeful and uplifting</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Texture &amp; surface detail</label>
-          <select id="texture" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Ultra-detailed, intricate fine grain</option>
-            <option>Smooth and clean</option>
-            <option>Rough and gritty</option>
-            <option>Glossy reflective surfaces</option>
-            <option>Matte soft finish</option>
-            <option>Worn and aged patina</option>
-            <option>Macro-level intricate detail</option>
-            <option>Painterly loose brushwork</option>
-            <option>Crystalline sharp edges</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Visual era / period</label>
-          <select id="era" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Victorian era (1837–1901)</option>
-            <option>Art Nouveau (1890–1910)</option>
-            <option>Art Deco (1920–1940)</option>
-            <option>Mid-century modern (1950s–60s)</option>
-            <option>Retro 1970s / 80s</option>
-            <option>Vaporwave 1990s aesthetic</option>
-            <option>Y2K early 2000s</option>
-            <option>Contemporary 2020s</option>
-            <option>Far future / speculative</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Cultural influence</label>
-          <select id="culture" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Japanese / East Asian</option>
-            <option>Middle Eastern / Islamic art</option>
-            <option>African tribal patterns</option>
-            <option>Nordic / Scandinavian</option>
-            <option>Indian / South Asian</option>
-            <option>Latin American / Mesoamerican</option>
-            <option>Western classical European</option>
-            <option>Polynesian / Pacific Islander</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Lighting -->
-      <div class="sec-head" style="margin-top:20px"><span class="sec-label">💡 Lighting</span><span class="sec-tip">Transforms everything</span></div>
-      <div class="grid-3">
-        <div class="field">
-          <label>Lighting type</label>
-          <select id="lighting" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Golden hour natural light</option>
-            <option>Soft studio diffused light</option>
-            <option>Hard directional shadow</option>
-            <option>Neon ambient glow</option>
-            <option>Candlelight / firelight</option>
-            <option>Moonlight / silver light</option>
-            <option>Volumetric god rays</option>
-            <option>Bioluminescent glow</option>
-            <option>Flash / strobe burst</option>
+      <div class="grid" style="margin-bottom:14px">
+        <div class="field"><label>Target AI model</label>
+          <select id="ai-model">
+            <option value="general">General (any tool)</option>
+            <option value="midjourney">Midjourney</option>
+            <option value="dalle">DALL·E 3</option>
+            <option value="firefly">Adobe Firefly</option>
+            <option value="sdxl">Stable Diffusion</option>
+            <option value="ideogram">Ideogram</option>
+            <option value="flux">Flux</option>
+            <option value="leonardo">Leonardo AI</option>
+          </select></div>
+        <div class="field"><label>Mood / atmosphere</label>
+          <select id="ai-mood">
+            <option value="">Keep original mood</option>
+            <option>Dramatic and moody</option><option>Bright and cheerful</option>
+            <option>Dark and mysterious</option><option>Romantic and warm</option>
+            <option>Epic and powerful</option><option>Peaceful and serene</option>
+            <option>Nostalgic and vintage</option><option>Whimsical and playful</option>
+          </select></div>
+        <div class="field"><label>Lighting style</label>
+          <select id="ai-light">
+            <option value="">Keep original lighting</option>
+            <option>Golden hour warm light</option><option>Studio soft box</option>
+            <option>Dramatic chiaroscuro</option><option>Neon ambient glow</option>
+            <option>Moonlight / night scene</option><option>Volumetric god rays</option>
             <option>Backlit silhouette</option>
-            <option>Three-point studio lighting</option>
-            <option>Rim light edge glow</option>
-            <option>Underwater caustic light</option>
-            <option>Chiaroscuro (extreme contrast)</option>
-          </select>
+          </select></div>
+        <div class="field"><label>Background change</label>
+          <select id="ai-bg">
+            <option value="">Keep original background</option>
+            <option>Blur background (bokeh)</option><option>Remove background</option>
+            <option>Futuristic cityscape</option><option>Nature / outdoor scene</option>
+            <option>Plain studio background</option><option>Fantasy / magical setting</option>
+            <option>Space / cosmic background</option><option>Cyberpunk alleyway</option>
+          </select></div>
+        <div class="field"><label>Color style</label>
+          <select id="ai-color">
+            <option value="">Keep original colors</option>
+            <option>Vibrant and saturated</option><option>Desaturated / cinematic</option>
+            <option>Black and white</option><option>Warm earth tones</option>
+            <option>Cool blues and purples</option><option>Pastel soft tones</option>
+            <option>Teal and orange Hollywood</option>
+          </select></div>
+        <div class="field"><label>Output quality</label>
+          <select id="ai-qual">
+            <option value="">Keep original quality</option>
+            <option>4K ultra-detailed</option><option>8K hyperrealistic</option>
+            <option>Cinematic 35mm grain</option><option>Shot on ARRI Alexa</option>
+            <option>Shot on Kodak Portra 400</option>
+          </select></div>
+      </div>
+
+      <div class="field" style="margin-bottom:14px">
+        <label>Specific changes or additions <span class="hint">— optional, type freely</span></label>
+        <textarea id="ai-custom" rows="2" placeholder="e.g. Make me look 10 years younger · change hair to blonde · add a crown · place me on a throne · add dramatic smoke effects…"></textarea>
+      </div>
+
+      <div class="err" id="err-box"></div>
+      <button class="ana-btn" id="ana-btn" onclick="analyze()">✨ Analyze image &amp; generate prompt</button>
+      <div class="lb" id="lb"><div class="lf"></div></div>
+
+      <!-- Result -->
+      <div class="rcard" id="rcard">
+        <div class="plabel">✨ Generated prompt — ready to copy &amp; paste</div>
+        <textarea id="r-pos" rows="6" oninput="document.getElementById('r-cc').textContent=this.value.length+' characters'"></textarea>
+        <div class="char-c" id="r-cc">0 characters</div>
+        <div style="margin-top:12px">
+          <div class="plabel" style="color:var(--danger-text)">🚫 Negative prompt</div>
+          <textarea id="r-neg" class="neg-ta" rows="2"></textarea>
         </div>
-        <div class="field">
-          <label>Shadow style</label>
-          <select id="shadow" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Long dramatic shadows</option>
-            <option>Soft diffused shadows</option>
-            <option>No shadows (flat light)</option>
-            <option>High contrast hard shadows</option>
-            <option>Colored tinted shadows</option>
-            <option>Shadow patterns through blinds</option>
-            <option>Deep moody underexposure</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Color temperature</label>
-          <select id="colortemp" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Warm amber (3000K candlelight)</option>
-            <option>Neutral white (5500K daylight)</option>
-            <option>Cool blue (6500K overcast)</option>
-            <option>Tungsten orange glow</option>
-            <option>Mixed warm and cool contrast</option>
-          </select>
+        <div class="sfx-box"><div class="sfx-label">Model parameters / suffix</div><div class="sfx-val" id="r-sfx">—</div></div>
+        <div class="ar">
+          <button class="ab ab-success" onclick="copyResult()">📋 Copy prompt</button>
+          <button class="ab ab-warn" onclick="enhanceResult()">🪄 Enhance further</button>
+          <button class="ab ab-info" onclick="saveResult()">🔖 Save</button>
+          <button class="ab" onclick="sendToManual()">➡️ Refine in builder</button>
+          <button class="ab" onclick="analyze()">🔄 Regenerate</button>
         </div>
       </div>
 
-      <!-- Camera & Composition -->
-      <div class="sec-head" style="margin-top:20px"><span class="sec-label">📷 Camera &amp; composition</span><span class="sec-tip">How the scene is framed</span></div>
-      <div class="grid-3">
-        <div class="field">
-          <label>Camera angle</label>
-          <select id="angle" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Eye-level straight on</option>
-            <option>Low angle, looking up</option>
-            <option>High angle, looking down</option>
-            <option>Bird's eye overhead</option>
-            <option>Dutch tilt (diagonal)</option>
-            <option>Over-the-shoulder</option>
-            <option>Extreme close-up</option>
-            <option>Wide establishing shot</option>
-            <option>Worm's eye view</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Lens / focal length</label>
-          <select id="lens" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Wide-angle 24mm</option>
-            <option>Standard 50mm</option>
-            <option>Portrait 85mm</option>
-            <option>Telephoto 200mm</option>
-            <option>Macro close-up lens</option>
-            <option>Fisheye distortion lens</option>
-            <option>Tilt-shift miniature effect</option>
-            <option>Anamorphic widescreen lens</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Depth of field</label>
-          <select id="dof" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Shallow — blurred bokeh background</option>
-            <option>Deep — everything sharp</option>
-            <option>Medium — soft mid-distance</option>
-            <option>Extreme bokeh — subject isolated</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Composition rule</label>
-          <select id="composition" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Rule of thirds</option>
-            <option>Centered symmetry</option>
-            <option>Leading lines</option>
-            <option>Framing within a frame</option>
-            <option>Golden ratio spiral</option>
-            <option>Negative space dominant</option>
-            <option>Diagonal dynamic tension</option>
-            <option>Layered foreground, middle, background</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Shot type / framing</label>
-          <select id="shottype" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Full body shot</option>
-            <option>Half body / waist up</option>
-            <option>Head and shoulders portrait</option>
-            <option>Tight face close-up</option>
-            <option>Aerial landscape wide</option>
-            <option>Environmental portrait</option>
-            <option>Action / motion shot</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Aspect ratio</label>
-          <select id="ratio" onchange="build()">
-            <option value="">— choose —</option>
-            <option value="16:9">16:9 widescreen</option>
-            <option value="9:16">9:16 vertical portrait</option>
-            <option value="1:1">1:1 square</option>
-            <option value="4:3">4:3 classic</option>
-            <option value="2.39:1">2.39:1 anamorphic cinema</option>
-            <option value="3:2">3:2 photography</option>
-            <option value="21:9">21:9 ultra-wide</option>
-          </select>
-        </div>
+      <!-- Tips -->
+      <div class="tips" id="img-tips">
+        <div class="tip"><div class="tip-icon">🤳</div><div class="tip-t">Portraits &amp; selfies</div><div class="tip-b">Choose "AI portrait" or "Professional headshot" — specify hair, expression, and background for best results.</div></div>
+        <div class="tip"><div class="tip-icon">🎨</div><div class="tip-t">Style transfer</div><div class="tip-b">Pick "Anime" or "Oil painting" to transform the art style while keeping your face and composition intact.</div></div>
+        <div class="tip"><div class="tip-icon">🚀</div><div class="tip-t">Midjourney tip</div><div class="tip-b">In Midjourney use /imagine [your image URL] [prompt] for reference-based image generation.</div></div>
+        <div class="tip"><div class="tip-icon">🔄</div><div class="tip-t">img2img tools</div><div class="tip-b">For photo-to-photo results, use the prompt in Stable Diffusion img2img or DALL·E variations alongside your image.</div></div>
       </div>
-
-      <!-- Quality & Rendering -->
-      <div class="sec-head" style="margin-top:20px"><span class="sec-label">⚙️ Quality &amp; rendering</span><span class="sec-tip">Technical output settings</span></div>
-      <div class="grid-3">
-        <div class="field">
-          <label>Resolution / quality</label>
-          <select id="quality" onchange="build()">
-            <option value="">— choose —</option>
-            <option>4K ultra-high detail</option>
-            <option>8K hyperrealistic</option>
-            <option>HD crisp</option>
-            <option>Cinematic grain (35mm film)</option>
-            <option>Lo-fi vintage degraded</option>
-            <option>RAW unprocessed look</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Rendering engine</label>
-          <select id="renderer" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Octane render</option>
-            <option>Unreal Engine 5</option>
-            <option>Blender Cycles</option>
-            <option>Shot on ARRI Alexa cinema camera</option>
-            <option>Shot on Kodak Portra 400 film</option>
-            <option>Shot on iPhone (candid natural)</option>
-            <option>V-Ray photorealistic render</option>
-            <option>Arnold renderer</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Post-processing effect</label>
-          <select id="postfx" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Film grain overlay</option>
-            <option>Lens flare</option>
-            <option>Chromatic aberration</option>
-            <option>Vignette darkened edges</option>
-            <option>Color graded with LUT</option>
-            <option>HDR tone mapping</option>
-            <option>Bloom glow effect</option>
-            <option>Motion blur</option>
-            <option>No post effects (raw)</option>
-            <option>Double exposure overlay</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Level of detail</label>
-          <select id="detail" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Hyper-detailed, intricate</option>
-            <option>Clean and minimalist</option>
-            <option>Moderate balanced detail</option>
-            <option>Highly stylized, simplified</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Style reference artist</label>
-          <select id="styleref" onchange="build()">
-            <option value="">— choose —</option>
-            <option>Roger Deakins (cinematography)</option>
-            <option>Hayao Miyazaki (animation)</option>
-            <option>Wes Anderson (symmetry, pastels)</option>
-            <option>H.R. Giger (dark biomechanical)</option>
-            <option>Simon Stålenhag (retro sci-fi)</option>
-            <option>Moebius / Jean Giraud (comic art)</option>
-            <option>Zack Snyder (dark epic cinema)</option>
-            <option>Greg Rutkowski (fantasy painting)</option>
-            <option>Alphonse Mucha (Art Nouveau)</option>
-            <option>Hiroshi Yoshida (woodblock print)</option>
-            <option>Beeple (digital glitch art)</option>
-            <option>Ansel Adams (landscape photography)</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Negative — what to avoid</label>
-          <select id="negative" onchange="build()">
-            <option value="">— choose —</option>
-            <option>No watermark or text overlays</option>
-            <option>No blurry or low quality</option>
-            <option>No extra limbs or deformities</option>
-            <option>No oversaturation</option>
-            <option>No cartoonish look</option>
-            <option>No flat lighting</option>
-            <option>No noise or artifacts</option>
-            <option>No cropped or cut-off subject</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- VIDEO ONLY SECTION -->
-      <div class="video-only" id="video-section">
-        <div class="sec-head" style="margin-top:20px">
-          <span class="sec-label">🎬 Motion &amp; timing</span>
-          <span class="badge badge-warn" style="margin-left:8px">Video only</span>
-          <span class="sec-tip">Unique to video generation</span>
-        </div>
-        <div class="grid-3">
-          <div class="field">
-            <label>Camera movement</label>
-            <select id="cammovement" onchange="build()">
-              <option value="">— choose —</option>
-              <option>Slow dolly forward</option>
-              <option>Orbit / arc around subject</option>
-              <option>Handheld shaky cam</option>
-              <option>Steady crane lift up</option>
-              <option>Fast whip pan</option>
-              <option>Static locked-off shot</option>
-              <option>Drone fly-over aerial</option>
-              <option>Slow push in zoom</option>
-              <option>Tracking alongside subject</option>
-              <option>Steadicam smooth follow</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Motion speed</label>
-            <select id="motionspeed" onchange="build()">
-              <option value="">— choose —</option>
-              <option>Slow motion (0.5×)</option>
-              <option>Ultra slow motion (0.1×)</option>
-              <option>Normal speed (1×)</option>
-              <option>Time-lapse (fast forward)</option>
-              <option>Hyperlapse (moving time-lapse)</option>
-              <option>Freeze frame with motion blur</option>
-              <option>Ramping speed (slow to fast)</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Subject motion</label>
-            <select id="subjectmotion" onchange="build()">
-              <option value="">— choose —</option>
-              <option>Gentle sway / idle animation</option>
-              <option>Walking forward confidently</option>
-              <option>Running at full speed</option>
-              <option>Slow turn to face camera</option>
-              <option>Environmental elements moving</option>
-              <option>Crowd movement around still subject</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Transition / edit style</label>
-            <select id="transition" onchange="build()">
-              <option value="">— choose —</option>
-              <option>Smooth morph / warp</option>
-              <option>Seamless loop</option>
-              <option>Hard cut</option>
-              <option>Cross dissolve fade</option>
-              <option>Whip pan cut</option>
-              <option>Match cut</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Clip duration</label>
-            <select id="duration" onchange="build()">
-              <option value="">— choose —</option>
-              <option>2–3 second clip</option>
-              <option>4–6 second clip</option>
-              <option>8–10 second clip</option>
-              <option>15 second scene</option>
-              <option>30 second sequence</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Audio / soundtrack mood</label>
-            <select id="audio" onchange="build()">
-              <option value="">— choose —</option>
-              <option>Orchestral epic score</option>
-              <option>Ambient atmospheric drone</option>
-              <option>Lo-fi chill beats</option>
-              <option>Eerie silence with subtle noise</option>
-              <option>Natural environmental sound</option>
-              <option>Electronic / synth soundtrack</option>
-              <option>Acoustic folk and warmth</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 4: PROMPT OUTPUT -->
-    <div class="divider"></div>
-    <div class="sec">
-      <div class="sec-head">
-        <span class="step-badge">4</span>
-        <span class="sec-label">Your generated prompt</span>
-        <span class="sec-tip">Edit freely — it's yours</span>
-      </div>
-
-      <div class="prompt-card">
-        <div class="prompt-label"><span class="icon">✨</span> Positive prompt</div>
-        <textarea id="prompt-out" rows="5" placeholder="Select options above — your prompt builds here automatically. You can also type or edit freely here at any time."></textarea>
-        <div class="char-count" id="char-count">0 characters</div>
-
-        <div style="margin-top:14px">
-          <div class="prompt-label" style="color:var(--danger-text)"><span class="icon">🚫</span> Negative prompt <span style="font-size:11px;font-weight:400;color:var(--text3)">(what to exclude)</span></div>
-          <textarea id="neg-out" class="neg-ta" rows="2" placeholder="blurry, watermark, low quality, extra limbs, deformed, ugly, oversaturated…"></textarea>
-          <div class="char-count" id="neg-count">0 characters</div>
-        </div>
-
-        <div class="suffix-box">
-          <div class="suffix-label">Model-specific suffix / parameters</div>
-          <div class="suffix-text" id="suffix-out">Select a model above to see the recommended suffix.</div>
-        </div>
-
-        <div class="action-row">
-          <button class="abtn" onclick="resetAll()">🔄 Reset all</button>
-          <button class="abtn abtn-warn" onclick="copyAll()">📋 Copy full prompt</button>
-          <button class="abtn abtn-info" onclick="savePrompt()">🔖 Save prompt</button>
-          <button class="abtn abtn-success" onclick="copyAndOpen('midjourney')">🚀 Copy for Midjourney</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- SAVED PROMPTS -->
-    <div class="sec">
-      <div class="sec-head">
-        <span class="sec-label">🔖 Saved prompts</span>
-        <button class="abtn abtn-danger" style="margin-left:auto;font-size:11px;padding:4px 10px" onclick="clearSaved()">Clear all</button>
-      </div>
-      <div class="saved-list" id="saved-list">
-        <div class="empty-saved">No saved prompts yet — build one above and click Save.</div>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- BEGINNER TIPS -->
-    <div class="sec">
-      <div class="sec-head"><span class="sec-label">💡 Beginner tips</span></div>
-      <div class="tips-grid">
-        <div class="tip-card"><div class="tip-icon">🎯</div><div class="tip-title">More detail = better results</div><div class="tip-body">AI models perform best with specific, vivid descriptions. Select 8–15 options for the richest output.</div></div>
-        <div class="tip-card"><div class="tip-icon">🚫</div><div class="tip-title">Negative prompts matter</div><div class="tip-body">Always fill in what to avoid. This prevents common issues like blurry faces, watermarks, and extra limbs.</div></div>
-        <div class="tip-card"><div class="tip-icon">💡</div><div class="tip-title">Lighting = mood</div><div class="tip-body">Lighting has the single biggest visual impact. Try "volumetric god rays" or "chiaroscuro" for drama.</div></div>
-        <div class="tip-card"><div class="tip-icon">🎨</div><div class="tip-title">Name your color palette</div><div class="tip-body">"Teal and orange Hollywood grade" or "pastel soft tones" give far more consistent results than just "colorful".</div></div>
-        <div class="tip-card"><div class="tip-icon">📷</div><div class="tip-title">Camera angle is storytelling</div><div class="tip-body">Low angles feel powerful; bird's eye feels detached. Dutch tilt adds tension. Choose intentionally.</div></div>
-        <div class="tip-card"><div class="tip-icon">🔖</div><div class="tip-title">Save your variations</div><div class="tip-body">Save a base prompt, then tweak one setting and save again. Compare saved versions to find what works.</div></div>
-        <div class="tip-card"><div class="tip-icon">⚙️</div><div class="tip-title">Use the model suffix</div><div class="tip-body">The suffix block formats your prompt for the chosen AI tool. For Midjourney, --v 6.1 --ar 16:9 is essential.</div></div>
-        <div class="tip-card"><div class="tip-icon">🎬</div><div class="tip-title">Video: start slow</div><div class="tip-body">For video AI, short clips (4–6s) with slow motion and a locked camera give the most reliable results.</div></div>
-        <div class="tip-card"><div class="tip-icon">🖌️</div><div class="tip-title">Reference an artist</div><div class="tip-body">Adding "in the style of Roger Deakins" or "Greg Rutkowski" instantly shifts the entire aesthetic.</div></div>
-      </div>
-    </div>
-
-    <div style="text-align:center;font-size:12px;color:var(--text3);padding-top:16px;border-top:1px solid var(--border);margin-top:8px">
-      Built with Claude · AI Prompt Builder Pro · For Midjourney, DALL·E 3, Firefly, Stable Diffusion, Runway, Sora &amp; more
     </div>
   </div>
+
+  <!-- ══════════════════════════════════
+       TAB 1: MANUAL BUILDER
+  ══════════════════════════════════ -->
+  <div id="p1" style="display:none">
+
+    <div class="step-row"><span class="step-n">1</span><span class="step-label">Choose mode</span></div>
+    <div class="mode-row">
+      <button class="mbtn active" id="bi" onclick="setMode('image')"><span class="ico">🖼️</span> Image generation</button>
+      <button class="mbtn" id="bv" onclick="setMode('video')"><span class="ico">🎬</span> Video generation</button>
+    </div>
+
+    <div class="step-row"><span class="step-n">2</span><span class="step-label">Target AI model</span><span class="step-tip">Prompt adapts per model</span></div>
+    <div class="mpills" id="mpills">
+      <button class="mpill active" data-t="both" onclick="setMdl(this,'general')">General</button>
+      <button class="mpill" data-t="image" onclick="setMdl(this,'midjourney')">Midjourney</button>
+      <button class="mpill" data-t="image" onclick="setMdl(this,'dalle')">DALL·E 3</button>
+      <button class="mpill" data-t="image" onclick="setMdl(this,'firefly')">Adobe Firefly</button>
+      <button class="mpill" data-t="image" onclick="setMdl(this,'sdxl')">Stable Diffusion</button>
+      <button class="mpill" data-t="image" onclick="setMdl(this,'ideogram')">Ideogram</button>
+      <button class="mpill" data-t="image" onclick="setMdl(this,'flux')">Flux</button>
+      <button class="mpill" data-t="image" onclick="setMdl(this,'leonardo')">Leonardo AI</button>
+      <button class="mpill" data-t="video" onclick="setMdl(this,'runway')">Runway Gen-3</button>
+      <button class="mpill" data-t="video" onclick="setMdl(this,'sora')">Sora</button>
+      <button class="mpill" data-t="video" onclick="setMdl(this,'kling')">Kling AI</button>
+      <button class="mpill" data-t="video" onclick="setMdl(this,'pika')">Pika Labs</button>
+      <button class="mpill" data-t="video" onclick="setMdl(this,'luma')">Luma Dream</button>
+    </div>
+
+    <div class="step-row"><span class="step-n">3</span><span class="step-label">Build your prompt</span><span class="step-tip" id="ptxt">0 of 35 selected</span></div>
+    <div class="prog-bar"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+
+    <!-- Subject & Scene -->
+    <div class="sh"><span class="ico">📍</span> Subject &amp; scene</div>
+    <div class="grid">
+      <div class="field"><label>Main subject <span class="hint">— who or what</span></label>
+        <select id="subject" onchange="build()">
+          <option value="">— choose a subject —</option>
+          <option>A portrait of a person</option><option>A group of people</option><option>A futuristic cityscape</option>
+          <option>A serene natural landscape</option><option>An animal in the wild</option><option>An abstract concept</option>
+          <option>A fantasy creature</option><option>An architectural structure</option><option>A still life composition</option>
+          <option>A sci-fi scene</option><option>A historical scene</option><option>An underwater world</option>
+          <option>A cosmic / space scene</option><option>A close-up food dish</option><option>A vehicle or transport</option>
+          <option>A robot or AI entity</option><option>A magical object</option><option>A natural disaster scene</option>
+        </select></div>
+      <div class="field"><label>Setting / environment <span class="hint">— where</span></label>
+        <select id="setting" onchange="build()">
+          <option value="">— choose a setting —</option>
+          <option>Dense urban city street</option><option>Misty mountain valley</option><option>Tropical beach at sunset</option>
+          <option>Dark enchanted forest</option><option>Futuristic space station</option><option>Ancient ruins</option>
+          <option>Minimalist white studio</option><option>Underground cave with crystals</option><option>Floating sky islands</option>
+          <option>Snowy tundra wilderness</option><option>Cyberpunk alleyway</option><option>Lush countryside meadow</option>
+          <option>Desert sand dunes</option><option>Medieval castle interior</option><option>Underwater coral reef</option>
+          <option>Volcanic landscape</option><option>Cherry blossom garden</option><option>Rooftop terrace at night</option>
+        </select></div>
+      <div class="field"><label>Time of day</label>
+        <select id="tod" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Golden hour (just after sunrise)</option><option>Midday bright sun</option><option>Late afternoon warmth</option>
+          <option>Blue hour (twilight)</option><option>Vivid sunset</option><option>Night with full moon</option>
+          <option>Overcast diffused daylight</option><option>Pre-dawn darkness</option><option>Stormy midday</option>
+        </select></div>
+      <div class="field"><label>Season</label>
+        <select id="season" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Spring — fresh greens and blossoms</option><option>Summer — lush and vivid</option>
+          <option>Autumn — amber and crimson foliage</option><option>Winter — bare and snow-covered</option>
+          <option>Dry season — parched earth</option><option>Monsoon — heavy rain and mist</option>
+        </select></div>
+      <div class="field"><label>Weather / atmosphere</label>
+        <select id="weather" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Clear and sunny</option><option>Heavy rain with puddles</option><option>Dense fog</option>
+          <option>Thunderstorm with lightning</option><option>Light snow flurries</option><option>Blizzard</option>
+          <option>Windy with swirling dust</option><option>After rain, wet surfaces</option><option>Heat haze shimmer</option>
+          <option>Dramatic storm clouds</option><option>Rainbow after rain</option>
+        </select></div>
+      <div class="field"><label>Subject action / expression</label>
+        <select id="action" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Standing still, commanding pose</option><option>In motion, dynamic energy</option>
+          <option>Looking directly at camera</option><option>Looking away, contemplative</option>
+          <option>Laughing, joyful expression</option><option>Intense focused expression</option>
+          <option>Mysterious, face in shadow</option><option>Running through environment</option>
+          <option>Seated, relaxed posture</option><option>Mid-leap, airborne</option>
+        </select></div>
+    </div>
+
+    <!-- Style -->
+    <div class="sh" style="margin-top:16px"><span class="ico">🎨</span> Style &amp; art direction</div>
+    <div class="grid">
+      <div class="field"><label>Art style</label>
+        <select id="artstyle" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Photorealistic</option><option>Cinematic film still</option><option>Oil painting</option>
+          <option>Watercolor illustration</option><option>Concept art</option><option>Anime / manga</option>
+          <option>Comic book / graphic novel</option><option>3D render (Octane)</option><option>Pencil sketch</option>
+          <option>Digital painting</option><option>Impressionist</option><option>Surrealist / dreamlike</option>
+          <option>Flat vector illustration</option><option>Pixel art (8-bit)</option><option>Neon glitch art</option>
+          <option>Charcoal drawing</option><option>Retro vintage poster</option><option>Ink wash (sumi-e)</option>
+          <option>Stained glass style</option>
+        </select></div>
+      <div class="field"><label>Color palette</label>
+        <select id="palette" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Warm earth tones</option><option>Cool blues and purples</option><option>Vibrant neon colors</option>
+          <option>Monochromatic black and white</option><option>Pastel soft tones</option><option>Desaturated cinematic</option>
+          <option>High contrast vivid</option><option>Warm sunset analogous hues</option>
+          <option>Teal and orange Hollywood grade</option><option>Muted vintage tones</option>
+          <option>Complementary color contrast</option><option>Duotone (two-color)</option>
+          <option>Jewel tones (deep rich colors)</option>
+        </select></div>
+      <div class="field"><label>Mood / emotion</label>
+        <select id="mood" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Epic and powerful</option><option>Mysterious and eerie</option><option>Peaceful and serene</option>
+          <option>Romantic and warm</option><option>Dark and brooding</option><option>Whimsical and playful</option>
+          <option>Tense and dramatic</option><option>Joyful and vibrant</option><option>Melancholic and longing</option>
+          <option>Awe-inspiring and grand</option><option>Nostalgic and bittersweet</option><option>Hopeful and uplifting</option>
+        </select></div>
+      <div class="field"><label>Texture &amp; surface detail</label>
+        <select id="texture" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Ultra-detailed, intricate fine grain</option><option>Smooth and clean</option>
+          <option>Rough and gritty</option><option>Glossy reflective surfaces</option>
+          <option>Matte soft finish</option><option>Worn and aged patina</option>
+          <option>Macro-level intricate detail</option><option>Painterly loose brushwork</option>
+        </select></div>
+      <div class="field"><label>Visual era / period</label>
+        <select id="era" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Victorian era (1837–1901)</option><option>Art Nouveau (1890–1910)</option>
+          <option>Art Deco (1920–1940)</option><option>Mid-century modern (1950s–60s)</option>
+          <option>Retro 1970s / 80s</option><option>Vaporwave 1990s aesthetic</option>
+          <option>Y2K early 2000s</option><option>Contemporary 2020s</option><option>Far future / speculative</option>
+        </select></div>
+      <div class="field"><label>Cultural influence</label>
+        <select id="culture" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Japanese / East Asian</option><option>Middle Eastern / Islamic art</option>
+          <option>African tribal patterns</option><option>Nordic / Scandinavian</option>
+          <option>Indian / South Asian</option><option>Latin American / Mesoamerican</option>
+          <option>Western classical European</option><option>Polynesian / Pacific Islander</option>
+        </select></div>
+    </div>
+
+    <!-- Lighting -->
+    <div class="sh" style="margin-top:16px"><span class="ico">💡</span> Lighting</div>
+    <div class="grid3">
+      <div class="field"><label>Lighting type</label>
+        <select id="lighting" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Golden hour natural light</option><option>Soft studio diffused light</option>
+          <option>Hard directional shadow</option><option>Neon ambient glow</option>
+          <option>Candlelight / firelight</option><option>Moonlight / silver light</option>
+          <option>Volumetric god rays</option><option>Bioluminescent glow</option>
+          <option>Backlit silhouette</option><option>Three-point studio lighting</option>
+          <option>Rim light edge glow</option><option>Chiaroscuro (extreme contrast)</option>
+        </select></div>
+      <div class="field"><label>Shadow style</label>
+        <select id="shadow" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Long dramatic shadows</option><option>Soft diffused shadows</option>
+          <option>No shadows (flat light)</option><option>High contrast hard shadows</option>
+          <option>Colored tinted shadows</option><option>Deep moody underexposure</option>
+        </select></div>
+      <div class="field"><label>Color temperature</label>
+        <select id="ctemp" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Warm amber (3000K candlelight)</option><option>Neutral white (5500K daylight)</option>
+          <option>Cool blue (6500K overcast)</option><option>Tungsten orange glow</option>
+          <option>Mixed warm and cool contrast</option>
+        </select></div>
+    </div>
+
+    <!-- Camera -->
+    <div class="sh" style="margin-top:16px"><span class="ico">📷</span> Camera &amp; composition</div>
+    <div class="grid3">
+      <div class="field"><label>Camera angle</label>
+        <select id="angle" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Eye-level straight on</option><option>Low angle, looking up</option>
+          <option>High angle, looking down</option><option>Bird's eye overhead</option>
+          <option>Dutch tilt (diagonal)</option><option>Over-the-shoulder</option>
+          <option>Extreme close-up</option><option>Wide establishing shot</option><option>Worm's eye view</option>
+        </select></div>
+      <div class="field"><label>Lens / focal length</label>
+        <select id="lens" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Wide-angle 24mm</option><option>Standard 50mm</option><option>Portrait 85mm</option>
+          <option>Telephoto 200mm</option><option>Macro close-up lens</option>
+          <option>Fisheye distortion lens</option><option>Tilt-shift miniature effect</option>
+          <option>Anamorphic widescreen lens</option>
+        </select></div>
+      <div class="field"><label>Depth of field</label>
+        <select id="dof" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Shallow — blurred bokeh background</option><option>Deep — everything sharp</option>
+          <option>Medium — soft mid-distance</option><option>Extreme bokeh — subject isolated</option>
+        </select></div>
+      <div class="field"><label>Composition rule</label>
+        <select id="comp" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Rule of thirds</option><option>Centered symmetry</option><option>Leading lines</option>
+          <option>Framing within a frame</option><option>Golden ratio spiral</option>
+          <option>Negative space dominant</option><option>Diagonal dynamic tension</option>
+        </select></div>
+      <div class="field"><label>Shot type</label>
+        <select id="shot" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Full body shot</option><option>Half body / waist up</option>
+          <option>Head and shoulders portrait</option><option>Tight face close-up</option>
+          <option>Aerial landscape wide</option><option>Environmental portrait</option>
+        </select></div>
+      <div class="field"><label>Aspect ratio</label>
+        <select id="ratio" onchange="build()">
+          <option value="">— choose —</option>
+          <option value="16:9">16:9 widescreen</option><option value="9:16">9:16 vertical portrait</option>
+          <option value="1:1">1:1 square</option><option value="4:3">4:3 classic</option>
+          <option value="2.39:1">2.39:1 anamorphic cinema</option><option value="3:2">3:2 photography</option>
+          <option value="21:9">21:9 ultra-wide</option>
+        </select></div>
+    </div>
+
+    <!-- Quality -->
+    <div class="sh" style="margin-top:16px"><span class="ico">⚙️</span> Quality &amp; rendering</div>
+    <div class="grid3">
+      <div class="field"><label>Resolution / quality</label>
+        <select id="quality" onchange="build()">
+          <option value="">— choose —</option>
+          <option>4K ultra-high detail</option><option>8K hyperrealistic</option><option>HD crisp</option>
+          <option>Cinematic grain (35mm film)</option><option>Lo-fi vintage degraded</option>
+        </select></div>
+      <div class="field"><label>Rendering engine</label>
+        <select id="renderer" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Octane render</option><option>Unreal Engine 5</option><option>Blender Cycles</option>
+          <option>Shot on ARRI Alexa cinema camera</option><option>Shot on Kodak Portra 400 film</option>
+          <option>Shot on iPhone (candid natural)</option><option>V-Ray photorealistic render</option>
+        </select></div>
+      <div class="field"><label>Post-processing effect</label>
+        <select id="postfx" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Film grain overlay</option><option>Lens flare</option><option>Chromatic aberration</option>
+          <option>Vignette darkened edges</option><option>Color graded with LUT</option>
+          <option>HDR tone mapping</option><option>Bloom glow effect</option>
+          <option>Motion blur</option><option>Double exposure overlay</option>
+        </select></div>
+      <div class="field"><label>Level of detail</label>
+        <select id="detail" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Hyper-detailed, intricate</option><option>Clean and minimalist</option>
+          <option>Moderate balanced detail</option><option>Highly stylized, simplified</option>
+        </select></div>
+      <div class="field"><label>Style reference artist</label>
+        <select id="styleref" onchange="build()">
+          <option value="">— choose —</option>
+          <option>Roger Deakins (cinematography)</option><option>Hayao Miyazaki (animation)</option>
+          <option>Wes Anderson (symmetry, pastels)</option><option>H.R. Giger (dark biomechanical)</option>
+          <option>Simon Stålenhag (retro sci-fi)</option><option>Moebius / Jean Giraud (comic art)</option>
+          <option>Greg Rutkowski (fantasy painting)</option><option>Alphonse Mucha (Art Nouveau)</option>
+          <option>Beeple (digital glitch art)</option><option>Ansel Adams (landscape photography)</option>
+        </select></div>
+      <div class="field"><label>What to avoid <span class="hint">— negative</span></label>
+        <select id="negative" onchange="build()">
+          <option value="">— choose —</option>
+          <option>No watermark or text overlays</option><option>No blurry or low quality</option>
+          <option>No extra limbs or deformities</option><option>No oversaturation</option>
+          <option>No cartoonish look</option><option>No flat lighting</option>
+          <option>No noise or artifacts</option><option>No cropped subject</option>
+        </select></div>
+    </div>
+
+    <!-- Video only -->
+    <div id="vidsec" style="display:none">
+      <div class="sh" style="margin-top:16px"><span class="ico">🎬</span> Motion &amp; timing <span class="vid-badge">Video only</span></div>
+      <div class="grid3">
+        <div class="field"><label>Camera movement</label>
+          <select id="camm" onchange="build()">
+            <option value="">— choose —</option>
+            <option>Slow dolly forward</option><option>Orbit / arc around subject</option>
+            <option>Handheld shaky cam</option><option>Steady crane lift up</option>
+            <option>Fast whip pan</option><option>Static locked-off shot</option>
+            <option>Drone fly-over aerial</option><option>Slow push in zoom</option>
+            <option>Steadicam smooth follow</option>
+          </select></div>
+        <div class="field"><label>Motion speed</label>
+          <select id="mspeed" onchange="build()">
+            <option value="">— choose —</option>
+            <option>Slow motion (0.5×)</option><option>Ultra slow motion (0.1×)</option>
+            <option>Normal speed (1×)</option><option>Time-lapse (fast forward)</option>
+            <option>Hyperlapse</option><option>Ramping speed (slow to fast)</option>
+          </select></div>
+        <div class="field"><label>Subject motion</label>
+          <select id="smot" onchange="build()">
+            <option value="">— choose —</option>
+            <option>Gentle sway / idle animation</option><option>Walking forward confidently</option>
+            <option>Running at full speed</option><option>Slow turn to face camera</option>
+            <option>Environmental elements moving</option>
+          </select></div>
+        <div class="field"><label>Transition style</label>
+          <select id="trans" onchange="build()">
+            <option value="">— choose —</option>
+            <option>Smooth morph / warp</option><option>Seamless loop</option>
+            <option>Hard cut</option><option>Cross dissolve fade</option><option>Match cut</option>
+          </select></div>
+        <div class="field"><label>Clip duration</label>
+          <select id="dur" onchange="build()">
+            <option value="">— choose —</option>
+            <option>2–3 second clip</option><option>4–6 second clip</option>
+            <option>8–10 second clip</option><option>15 second scene</option>
+          </select></div>
+        <div class="field"><label>Audio / soundtrack</label>
+          <select id="audio" onchange="build()">
+            <option value="">— choose —</option>
+            <option>Orchestral epic score</option><option>Ambient atmospheric drone</option>
+            <option>Lo-fi chill beats</option><option>Eerie silence with subtle noise</option>
+            <option>Natural environmental sound</option><option>Electronic / synth soundtrack</option>
+          </select></div>
+      </div>
+    </div>
+
+    <div class="div"></div>
+
+    <!-- Output -->
+    <div class="step-row"><span class="step-n">4</span><span class="step-label">Your generated prompt</span><span class="step-tip">Edit freely</span></div>
+    <div class="pcard">
+      <div class="plabel">✨ Positive prompt</div>
+      <textarea id="pout" rows="5" placeholder="Select options above — your prompt builds here automatically. You can also type or edit freely."></textarea>
+      <div class="char-c" id="pcc">0 characters</div>
+      <div style="margin-top:12px">
+        <div class="plabel" style="color:var(--danger-text)">🚫 Negative prompt <span style="font-size:11px;font-weight:400;color:var(--text3)">— what to exclude</span></div>
+        <textarea id="nout" class="neg-ta" rows="2" placeholder="blurry, watermark, low quality, extra limbs, deformed…"></textarea>
+        <div class="char-c" id="ncc">0 characters</div>
+      </div>
+      <div class="sfx-box"><div class="sfx-label">Model suffix / parameters</div><div class="sfx-val" id="sfxout">Select a model above to see the recommended suffix.</div></div>
+      <div class="ar">
+        <button class="ab" onclick="resetAll()">🔄 Reset all</button>
+        <button class="ab ab-warn" onclick="enhance()">🪄 Enhance with Claude</button>
+        <button class="ab ab-info" onclick="savePmt()">🔖 Save</button>
+        <button class="ab ab-success" id="cpybtn" onclick="copyPmt()">📋 Copy prompt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 2: SAVED PROMPTS + TIPS
+  ══════════════════════════════════ -->
+  <div id="p2" style="display:none">
+    <div class="step-row">
+      <span class="step-label">Saved prompts</span>
+      <button class="ab ab-danger" style="margin-left:auto;font-size:11px;padding:5px 11px" onclick="clearSaved()">🗑️ Clear all</button>
+    </div>
+    <div class="saved-list" id="slist"><div class="empty-msg">No saved prompts yet — build one and click Save.</div></div>
+
+    <div class="div"></div>
+    <div class="sh">💡 Beginner tips</div>
+    <div class="tips">
+      <div class="tip"><div class="tip-icon">🎯</div><div class="tip-t">More detail = better results</div><div class="tip-b">Select 8–15 options. AI models thrive on specific, vivid descriptions rather than vague terms.</div></div>
+      <div class="tip"><div class="tip-icon">🚫</div><div class="tip-t">Negative prompts matter</div><div class="tip-b">Always fill in what to avoid — prevents blurry faces, watermarks, extra limbs, and bad anatomy.</div></div>
+      <div class="tip"><div class="tip-icon">💡</div><div class="tip-t">Lighting transforms everything</div><div class="tip-b">Try "volumetric god rays" or "chiaroscuro" — this single setting has the biggest visual impact.</div></div>
+      <div class="tip"><div class="tip-icon">🎨</div><div class="tip-t">Name your exact colors</div><div class="tip-b">"Teal and orange Hollywood grade" gives far more consistent results than just saying "colorful".</div></div>
+      <div class="tip"><div class="tip-icon">📷</div><div class="tip-t">Camera angle = storytelling</div><div class="tip-b">Low angles feel powerful. Dutch tilt adds tension. Bird's eye feels detached and observational.</div></div>
+      <div class="tip"><div class="tip-icon">🔖</div><div class="tip-t">Save your variations</div><div class="tip-b">Save a base prompt, tweak one setting, save again. Compare to find what works best.</div></div>
+      <div class="tip"><div class="tip-icon">⚙️</div><div class="tip-t">Use the model suffix</div><div class="tip-b">For Midjourney, --v 6.1 --ar 16:9 is essential. The suffix box fills it in automatically.</div></div>
+      <div class="tip"><div class="tip-icon">🖌️</div><div class="tip-t">Reference an artist</div><div class="tip-b">"In the style of Roger Deakins" or "Greg Rutkowski" instantly shifts the entire aesthetic.</div></div>
+      <div class="tip"><div class="tip-icon">🎬</div><div class="tip-t">Video: keep clips short</div><div class="tip-b">4–6 second clips with slow camera movement give the most reliable video generation results.</div></div>
+      <div class="tip"><div class="tip-icon">📸</div><div class="tip-t">Upload a photo first</div><div class="tip-b">Use the Image Analysis tab — Claude reads your photo and writes the prompt for you automatically.</div></div>
+    </div>
+  </div>
+
+  <div class="footer">AI Prompt Builder Pro · Powered by Claude · Works with Midjourney · DALL·E 3 · Adobe Firefly · Stable Diffusion · Runway · Sora · Kling · and more</div>
+</div>
 </div>
 
 <script>
-let mode='image';
-let currentModel='general';
-let saved=[];
+let mode='image',mdl='general',purpose='recreate',saved=[],imgB64=null,imgType=null;
 
-const modelSuffixes={
-  general:'Paste directly into your chosen AI tool. No special suffix needed.',
-  midjourney:'--ar {ratio} --style raw --q 2 --v 6.1',
-  dalle:'Instruction: Generate as a high-quality {ratio} format image with photorealistic detail.',
-  firefly:'Settings: Quality: high | Content type: photo | Generative match: photo | Style strength: 60',
-  sdxl:'Recommended: steps: 30, CFG scale: 7, sampler: DPM++ 2M Karras, clip skip: 1',
-  ideogram:'Style: Realistic | Aspect ratio: {ratio} | Magic prompt: on',
-  flux:'Mode: dev | Steps: 28 | Guidance: 3.5 | Aspect: {ratio}',
-  leonardo:'Model: Leonardo Kino XL | Guidance: 7 | Steps: 30 | Aspect: {ratio}',
-  runway:'Motion: cinematic | Duration: 4s | Resolution: 1280x768 | Camera control: auto',
+const sfxMap={
+  general:'Paste directly into your chosen AI tool — no special suffix needed.',
+  midjourney:'--ar {r} --style raw --q 2 --v 6.1',
+  dalle:'Instruction: Generate as a high-quality {r} format photorealistic image.',
+  firefly:'Quality: high | Content type: photo | Style strength: 60',
+  sdxl:'steps: 30, CFG scale: 7, sampler: DPM++ 2M Karras, clip skip: 1',
+  ideogram:'Style: Realistic | Aspect ratio: {r} | Magic prompt: on',
+  flux:'Mode: dev | Steps: 28 | Guidance: 3.5 | Aspect: {r}',
+  leonardo:'Model: Leonardo Kino XL | Guidance: 7 | Steps: 30 | Aspect: {r}',
+  runway:'Motion: cinematic | Duration: 4s | Resolution: 1280×768 | Camera: auto',
   sora:'Duration: 10s | Resolution: 1080p | Style: cinematic | Loop: off',
-  kling:'Motion strength: medium | Duration: 5s | Quality: professional | Mode: standard',
-  pika:'Motion: 1.5 | Aspect ratio: {ratio} | FPS: 24 | Seed: random',
-  luma:'Duration: 5s | Aspect: {ratio} | Loop: off | Quality: high'
+  kling:'Motion strength: medium | Duration: 5s | Quality: professional',
+  pika:'Motion: 1.5 | Aspect: {r} | FPS: 24',
+  luma:'Duration: 5s | Aspect: {r} | Loop: off | Quality: high'
 };
+const purposeMap={
+  recreate:'Recreate this image as closely as possible for an AI image generator',
+  portrait:'Transform the person into a stunning AI-generated portrait',
+  anime:'Reimagine in detailed anime / Japanese animation illustration style',
+  cinematic:'Transform into a cinematic film still with professional color grading',
+  painting:'Recreate as a detailed oil painting with visible brushwork and rich texture',
+  fantasy:'Transform into a magical fantasy scene with mystical and ethereal elements',
+  scifi:'Reimagine as a sci-fi futuristic scene with advanced technology and neon lighting',
+  vintage:'Transform into a vintage retro style photograph from the 1960s–1980s',
+  headshot:'Transform subject into a professional corporate headshot on a clean plain background',
+  cartoon:'Reimagine as a stylized cartoon or comic book illustration with bold outlines',
+  '3d':'Transform into a high-quality 3D rendered image using Octane or Blender Cycles',
+  watercolor:'Reimagine as a delicate watercolor painting with soft washes and visible paper texture'
+};
+const vidMdls=['runway','sora','kling','pika','luma'];
+const allIds=['subject','setting','tod','season','weather','action','artstyle','palette','mood','texture','era','culture','lighting','shadow','ctemp','angle','lens','dof','comp','shot','ratio','quality','renderer','postfx','detail','styleref','negative','camm','mspeed','smot','trans','dur','audio'];
 
-const videoModels=['runway','sora','kling','pika','luma'];
+function v(id){const e=document.getElementById(id);return e?e.value:'';}
+function getRatio(){const r=v('ratio');return r?r.replace(/[^0-9.:]/g,'').split(' ')[0]||'1:1':'1:1';}
+
+function sw(n){
+  [0,1,2].forEach(i=>{
+    document.getElementById('t'+i).classList.toggle('active',i===n);
+    document.getElementById('p'+i).style.display=i===n?'block':'none';
+  });
+}
 
 function setMode(m){
   mode=m;
-  document.getElementById('btn-image').classList.toggle('active',m==='image');
-  document.getElementById('btn-video').classList.toggle('active',m==='video');
-  const wrap=document.querySelector('.container');
-  if(m==='video') wrap.classList.add('video-mode');
-  else wrap.classList.remove('video-mode');
-  document.querySelectorAll('.model-pill').forEach(p=>{
-    const t=p.dataset.type;
+  document.getElementById('bi').classList.toggle('active',m==='image');
+  document.getElementById('bv').classList.toggle('active',m==='video');
+  document.getElementById('vidsec').style.display=m==='video'?'block':'none';
+  document.querySelectorAll('.mpill').forEach(p=>{
+    const t=p.dataset.t;
     p.style.display=(t==='both'||(t==='image'&&m==='image')||(t==='video'&&m==='video'))?'':'none';
   });
-  if(m==='image'&&videoModels.includes(currentModel)){
-    const first=document.querySelector('.model-pill[data-type="both"]');
-    setModel(first,'general');
-  }
-  if(m==='video'&&!videoModels.includes(currentModel)){
-    const first=document.querySelector('.model-pill[data-type="video"]');
-    setModel(first,'runway');
-  }
+  if(m==='image'&&vidMdls.includes(mdl))setMdl(document.querySelector('.mpill[data-t="both"]'),'general');
+  if(m==='video'&&!vidMdls.includes(mdl))setMdl(document.querySelector('.mpill[data-t="video"]'),'runway');
   build();
 }
 
-function setModel(el,m){
-  currentModel=m;
-  document.querySelectorAll('.model-pill').forEach(p=>p.classList.remove('active'));
+function setMdl(el,m){
+  mdl=m;
+  document.querySelectorAll('.mpill').forEach(p=>p.classList.remove('active'));
   el.classList.add('active');
-  updateSuffix();
+  updateSfx();
 }
 
-function v(id){return document.getElementById(id).value;}
-
-function getRatio(){
-  const r=v('ratio');
-  if(!r) return '1:1';
-  const clean=r.replace(/[^0-9.:]/g,'').split(' ')[0];
-  return clean||'1:1';
+function updateSfx(){
+  const s=sfxMap[mdl]||'';
+  document.getElementById('sfxout').textContent=s.replace(/\{r\}/g,getRatio());
 }
 
-function updateSuffix(){
-  const suf=modelSuffixes[currentModel]||'';
-  document.getElementById('suffix-out').textContent=suf.replace(/\{ratio\}/g,getRatio());
-}
-
-const ALL_IDS=['subject','setting','timeofday','season','weather','action',
-  'artstyle','palette','mood','texture','era','culture',
-  'lighting','shadow','colortemp','angle','lens','dof','composition','shottype','ratio',
-  'quality','renderer','postfx','detail','styleref','negative',
-  'cammovement','motionspeed','subjectmotion','transition','duration','audio'];
-
-function countFilled(){return ALL_IDS.filter(id=>v(id)).length;}
-
-function updateProgress(){
-  const filled=countFilled();
-  const total=ALL_IDS.length;
-  const pct=Math.round(filled/total*100);
-  document.getElementById('prog-fill').style.width=pct+'%';
-  document.getElementById('prog-text').textContent=filled+' of '+total+' selected';
-  document.querySelectorAll('select').forEach(s=>{
-    s.classList.toggle('filled',!!s.value);
-  });
+function updateProg(){
+  const filled=allIds.filter(id=>v(id)).length;
+  const pct=Math.round(filled/allIds.length*100);
+  document.getElementById('pf').style.width=pct+'%';
+  document.getElementById('ptxt').textContent=filled+' of '+allIds.length+' selected';
+  document.querySelectorAll('#p1 select').forEach(s=>s.classList.toggle('filled',!!s.value));
 }
 
 function build(){
-  const parts=[];
-  const sub=v('subject'),act=v('action'),set=v('setting'),tod=v('timeofday'),seas=v('season'),
-    wth=v('weather'),as=v('artstyle'),pal=v('palette'),mood=v('mood'),tex=v('texture'),
-    era=v('era'),cult=v('culture'),lit=v('lighting'),shad=v('shadow'),ct=v('colortemp'),
-    ang=v('angle'),lens=v('lens'),dof=v('dof'),comp=v('composition'),shot=v('shottype'),
-    rat=v('ratio'),q=v('quality'),rend=v('renderer'),pfx=v('postfx'),det=v('detail'),sref=v('styleref'),neg=v('negative');
-
-  if(sub) parts.push(sub);
-  if(act) parts.push(act.toLowerCase());
-  if(set) parts.push('in '+set.toLowerCase());
-  if(tod) parts.push(tod.toLowerCase());
-  if(seas) parts.push(seas.toLowerCase());
-  if(wth) parts.push(wth.toLowerCase());
-  if(as) parts.push(as+' style');
-  if(mood) parts.push(mood.toLowerCase()+' mood');
-  if(era) parts.push(era.toLowerCase()+' aesthetic');
-  if(cult) parts.push(cult.toLowerCase()+' cultural influence');
-  if(pal) parts.push(pal.toLowerCase()+' color palette');
-  if(tex) parts.push(tex.toLowerCase());
-  if(lit) parts.push(lit.toLowerCase());
-  if(ct) parts.push(ct.toLowerCase());
-  if(shad) parts.push(shad.toLowerCase());
-  if(ang) parts.push(ang.toLowerCase()+' camera angle');
-  if(shot) parts.push(shot.toLowerCase());
-  if(lens) parts.push(lens.toLowerCase());
-  if(dof) parts.push(dof.toLowerCase());
-  if(comp) parts.push(comp.toLowerCase()+' composition');
-  if(rat) parts.push(rat+' aspect ratio');
-  if(q) parts.push(q.toLowerCase());
-  if(rend) parts.push(rend.toLowerCase());
-  if(pfx) parts.push(pfx.toLowerCase());
-  if(det) parts.push(det.toLowerCase());
-  if(sref) parts.push('in the style of '+sref.toLowerCase());
-
+  const p=[];
+  if(v('subject'))p.push(v('subject'));
+  if(v('action'))p.push(v('action').toLowerCase());
+  if(v('setting'))p.push('in '+v('setting').toLowerCase());
+  if(v('tod'))p.push(v('tod').toLowerCase());
+  if(v('season'))p.push(v('season').toLowerCase());
+  if(v('weather'))p.push(v('weather').toLowerCase());
+  if(v('artstyle'))p.push(v('artstyle')+' style');
+  if(v('mood'))p.push(v('mood').toLowerCase()+' mood');
+  if(v('era'))p.push(v('era').toLowerCase()+' aesthetic');
+  if(v('culture'))p.push(v('culture').toLowerCase()+' cultural influence');
+  if(v('palette'))p.push(v('palette').toLowerCase()+' color palette');
+  if(v('texture'))p.push(v('texture').toLowerCase());
+  if(v('lighting'))p.push(v('lighting').toLowerCase());
+  if(v('ctemp'))p.push(v('ctemp').toLowerCase());
+  if(v('shadow'))p.push(v('shadow').toLowerCase());
+  if(v('angle'))p.push(v('angle').toLowerCase()+' camera angle');
+  if(v('shot'))p.push(v('shot').toLowerCase());
+  if(v('lens'))p.push(v('lens').toLowerCase());
+  if(v('dof'))p.push(v('dof').toLowerCase());
+  if(v('comp'))p.push(v('comp').toLowerCase()+' composition');
+  if(v('ratio'))p.push(v('ratio')+' aspect ratio');
+  if(v('quality'))p.push(v('quality').toLowerCase());
+  if(v('renderer'))p.push(v('renderer').toLowerCase());
+  if(v('postfx'))p.push(v('postfx').toLowerCase());
+  if(v('detail'))p.push(v('detail').toLowerCase());
+  if(v('styleref'))p.push('in the style of '+v('styleref').toLowerCase());
   if(mode==='video'){
-    const cm=v('cammovement'),ms=v('motionspeed'),sm=v('subjectmotion'),tr=v('transition'),dur=v('duration'),aud=v('audio');
-    if(cm) parts.push(cm.toLowerCase()+' camera movement');
-    if(sm) parts.push(sm.toLowerCase());
-    if(ms) parts.push(ms.toLowerCase());
-    if(tr) parts.push(tr.toLowerCase()+' transition');
-    if(dur) parts.push(dur.toLowerCase());
-    if(aud) parts.push('audio: '+aud.toLowerCase());
+    if(v('camm'))p.push(v('camm').toLowerCase()+' camera movement');
+    if(v('smot'))p.push(v('smot').toLowerCase());
+    if(v('mspeed'))p.push(v('mspeed').toLowerCase());
+    if(v('trans'))p.push(v('trans').toLowerCase()+' transition');
+    if(v('dur'))p.push(v('dur').toLowerCase());
+    if(v('audio'))p.push('audio: '+v('audio').toLowerCase());
   }
-
   const prefix=mode==='video'?'A cinematic video of: ':'';
-  document.getElementById('prompt-out').value=parts.length?prefix+parts.join(', '):'';
-
-  if(neg) document.getElementById('neg-out').value=neg.replace(/^No /i,'').toLowerCase()+', deformed, ugly, bad anatomy, watermark, signature';
-  else document.getElementById('neg-out').value='';
-
-  updateCharCount();
-  updateNegCount();
-  updateSuffix();
-  updateProgress();
+  document.getElementById('pout').value=p.length?prefix+p.join(', '):'';
+  const neg=v('negative');
+  document.getElementById('nout').value=neg?neg.replace(/^No /i,'').toLowerCase()+', deformed, ugly, bad anatomy, watermark, signature':'';
+  document.getElementById('pcc').textContent=document.getElementById('pout').value.length+' characters';
+  document.getElementById('ncc').textContent=document.getElementById('nout').value.length+' characters';
+  updateSfx();updateProg();
 }
 
-function updateCharCount(){document.getElementById('char-count').textContent=document.getElementById('prompt-out').value.length+' characters';}
-function updateNegCount(){document.getElementById('neg-count').textContent=document.getElementById('neg-out').value.length+' characters';}
-
-function copyAll(){
-  const p=document.getElementById('prompt-out').value;
-  const suf=document.getElementById('suffix-out').textContent;
-  const safeSuf=suf.startsWith('Paste')||suf.startsWith('Select')?'':'\n\n'+suf;
-  if(!p){alert('Nothing to copy yet! Select some options first.');return;}
-  navigator.clipboard.writeText(p+safeSuf).then(()=>{
-    const b=event.target;const orig=b.textContent;b.textContent='✅ Copied!';setTimeout(()=>b.textContent=orig,2000);
+function copyPmt(){
+  const p=document.getElementById('pout').value;
+  if(!p){alert('Build a prompt first by selecting options above.');return;}
+  const s=document.getElementById('sfxout').textContent;
+  const full=p+(s&&!s.startsWith('Paste')&&!s.startsWith('Select')?'\n\n'+s:'');
+  navigator.clipboard.writeText(full).then(()=>{
+    const b=document.getElementById('cpybtn');const o=b.textContent;
+    b.textContent='✅ Copied!';setTimeout(()=>b.textContent=o,2000);
   }).catch(()=>{});
 }
 
-function copyAndOpen(m){
-  const p=document.getElementById('prompt-out').value;
-  if(!p){alert('Build a prompt first!');return;}
-  const suf=modelSuffixes[m].replace(/\{ratio\}/g,getRatio());
-  navigator.clipboard.writeText(p+' '+suf).then(()=>{
-    const b=event.target;const orig=b.textContent;b.textContent='✅ Copied for Midjourney!';setTimeout(()=>b.textContent=orig,2000);
-  }).catch(()=>{});
+function enhance(){
+  const p=document.getElementById('pout').value;
+  alert('Claude Enhance:\n\nOpen Claude.ai and paste:\n"Please enhance this '+mode+' generation prompt for '+mdl+': '+p+'"');
 }
 
-function savePrompt(){
-  const p=document.getElementById('prompt-out').value.trim();
+function savePmt(){
+  const p=document.getElementById('pout').value.trim();
   if(!p){alert('Nothing to save yet!');return;}
-  saved.unshift({text:p,model:currentModel,mode,time:new Date().toLocaleTimeString()});
-  if(saved.length>10) saved.pop();
+  saved.unshift({text:p,model:mdl,mode,time:new Date().toLocaleTimeString(),src:'builder'});
+  if(saved.length>12)saved.pop();
+  renderSaved();
+}
+
+function saveResult(){
+  const p=document.getElementById('r-pos').value.trim();
+  if(!p){alert('Nothing to save yet!');return;}
+  saved.unshift({text:p,model:document.getElementById('ai-model').value,mode:'image',time:new Date().toLocaleTimeString(),src:'image'});
+  if(saved.length>12)saved.pop();
   renderSaved();
 }
 
 function renderSaved(){
-  const list=document.getElementById('saved-list');
-  if(!saved.length){list.innerHTML='<div class="empty-saved">No saved prompts yet — build one above and click Save.</div>';return;}
-  list.innerHTML=saved.map((s,i)=>`
-    <div class="saved-item" onclick="loadSaved(${i})">
+  document.getElementById('sc').textContent=saved.length?'('+saved.length+')':'';
+  const el=document.getElementById('slist');
+  if(!saved.length){el.innerHTML='<div class="empty-msg">No saved prompts yet — build one and click Save.</div>';return;}
+  el.innerHTML=saved.map((s,i)=>`
+    <div class="si" onclick="loadSaved(${i})">
       <div style="flex:1;min-width:0">
-        <div class="saved-meta">${s.mode} · ${s.model} · ${s.time}</div>
-        <div class="saved-text">${s.text}</div>
+        <div class="si-meta">${s.src==='image'?'📷':'✏️'} ${s.mode} · ${s.model} · ${s.time}</div>
+        <div class="si-text">${s.text}</div>
       </div>
-      <button class="saved-del" onclick="event.stopPropagation();deleteSaved(${i})" title="Delete">✕</button>
+      <button class="sdel" onclick="event.stopPropagation();delSaved(${i})" title="Delete">✕</button>
     </div>`).join('');
 }
 
-function loadSaved(i){document.getElementById('prompt-out').value=saved[i].text;updateCharCount();}
-function deleteSaved(i){saved.splice(i,1);renderSaved();}
+function loadSaved(i){
+  document.getElementById('pout').value=saved[i].text;
+  document.getElementById('pcc').textContent=saved[i].text.length+' characters';
+  sw(1);
+}
+function delSaved(i){saved.splice(i,1);renderSaved();}
 function clearSaved(){if(confirm('Clear all saved prompts?')){saved=[];renderSaved();}}
 
 function resetAll(){
-  if(!confirm('Reset all selections?')) return;
-  document.querySelectorAll('select').forEach(s=>{s.selectedIndex=0;s.classList.remove('filled');});
-  document.getElementById('prompt-out').value='';
-  document.getElementById('neg-out').value='';
-  document.getElementById('suffix-out').textContent='Select a model above to see the recommended suffix.';
-  updateCharCount();updateNegCount();updateProgress();
+  if(!confirm('Reset all selections?'))return;
+  document.querySelectorAll('#p1 select').forEach(s=>{s.selectedIndex=0;s.classList.remove('filled');});
+  ['pout','nout'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('sfxout').textContent='Select a model above to see the recommended suffix.';
+  document.getElementById('pcc').textContent='0 characters';
+  document.getElementById('ncc').textContent='0 characters';
+  updateProg();
+}
+
+const dz=document.getElementById('dz');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag');});
+dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');if(e.dataTransfer.files[0])handleFile(e.dataTransfer.files[0]);});
+
+function handleFile(file){
+  if(!file||!file.type.startsWith('image/')){showErr('Please upload a valid image file (JPG, PNG, WEBP).');return;}
+  if(file.size>10*1024*1024){showErr('Image too large. Please use an image under 10MB.');return;}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    imgB64=e.target.result.split(',')[1];imgType=file.type;
+    document.getElementById('pi').src=e.target.result;
+    document.getElementById('ua').style.display='none';
+    document.getElementById('pa').style.display='block';
+    document.getElementById('rcard').style.display='none';
+    hideErr();
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeImg(){
+  imgB64=null;imgType=null;
+  document.getElementById('fi').value='';
+  document.getElementById('ua').style.display='block';
+  document.getElementById('pa').style.display='none';
+  document.getElementById('rcard').style.display='none';
+}
+
+function setP(el,p){
+  purpose=p;
+  document.querySelectorAll('.spill').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function showErr(m){const e=document.getElementById('err-box');e.textContent=m;e.style.display='block';}
+function hideErr(){document.getElementById('err-box').style.display='none';}
+
+async function analyze(){
+  if(!imgB64){showErr('Please upload an image first.');return;}
+  const btn=document.getElementById('ana-btn');
+  const lb=document.getElementById('lb');
+  btn.disabled=true;
+  btn.textContent='⏳ Analyzing your image…';
+  lb.style.display='block';
+  document.getElementById('rcard').style.display='none';
+  document.getElementById('img-tips').style.display='none';
+  hideErr();
+
+  const mood=document.getElementById('ai-mood').value;
+  const light=document.getElementById('ai-light').value;
+  const bg=document.getElementById('ai-bg').value;
+  const color=document.getElementById('ai-color').value;
+  const qual=document.getElementById('ai-qual').value;
+  const custom=document.getElementById('ai-custom').value.trim();
+  const model=document.getElementById('ai-model').value;
+  const intent=purposeMap[purpose]||'Recreate this image';
+
+  let instr=`Analyze this image in detail and generate a comprehensive AI image generation prompt.\n\nPrimary intent: ${intent}.\n`;
+  if(mood)instr+=`Mood: ${mood}.\n`;
+  if(light)instr+=`Lighting: ${light}.\n`;
+  if(bg)instr+=`Background: ${bg}.\n`;
+  if(color)instr+=`Color style: ${color}.\n`;
+  if(qual)instr+=`Quality: ${qual}.\n`;
+  if(custom)instr+=`User requests: ${custom}.\n`;
+  instr+=`\nGenerate TWO things:\n1. POSITIVE PROMPT: A detailed vivid prompt (150-250 words) as comma-separated descriptive phrases for an AI image generator. Include subject, style, lighting, colors, composition, mood, and all modifications.\n2. NEGATIVE PROMPT: Short list of things to avoid.\n\nFormat EXACTLY as:\nPOSITIVE PROMPT:\n[prompt here]\n\nNEGATIVE PROMPT:\n[negatives here]`;
+
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:1000,
+        messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:imgType,data:imgB64}},
+          {type:'text',text:instr}
+        ]}]
+      })
+    });
+    const data=await resp.json();
+    if(!resp.ok)throw new Error(data.error?.message||'API error');
+    const text=data.content.map(b=>b.text||'').join('');
+    const pos=(text.match(/POSITIVE PROMPT:\s*([\s\S]*?)(?=NEGATIVE PROMPT:|$)/i)||[])[1]?.trim()||'';
+    const neg=(text.match(/NEGATIVE PROMPT:\s*([\s\S]*?)$/i)||[])[1]?.trim()||'';
+    document.getElementById('r-pos').value=pos;
+    document.getElementById('r-neg').value=neg;
+    document.getElementById('r-cc').textContent=pos.length+' characters';
+    document.getElementById('r-sfx').textContent=(sfxMap[model]||'').replace(/\{r\}/g,'1:1');
+    document.getElementById('rcard').style.display='block';
+    document.getElementById('img-tips').style.display='none';
+  }catch(err){
+    showErr('Something went wrong: '+err.message+'. Please try again.');
+    document.getElementById('img-tips').style.display='grid';
+  }finally{
+    btn.disabled=false;
+    btn.textContent='✨ Analyze image & generate prompt';
+    lb.style.display='none';
+  }
+}
+
+function copyResult(){
+  const p=document.getElementById('r-pos').value;
+  if(!p)return;
+  const s=document.getElementById('r-sfx').textContent;
+  const full=p+(s&&s!=='—'&&!s.startsWith('Paste')?'\n\n'+s:'');
+  navigator.clipboard.writeText(full).then(()=>{
+    const b=event.target;const o=b.textContent;
+    b.textContent='✅ Copied!';setTimeout(()=>b.textContent=o,2000);
+  }).catch(()=>{});
+}
+
+function enhanceResult(){
+  const p=document.getElementById('r-pos').value;
+  if(!p)return;
+  alert('Claude Enhance:\n\nOpen Claude.ai and paste:\n"Please enhance this image generation prompt: '+p+'"');
+}
+
+function sendToManual(){
+  const p=document.getElementById('r-pos').value;
+  if(!p)return;
+  document.getElementById('pout').value=p;
+  document.getElementById('pcc').textContent=p.length+' characters';
+  sw(1);
 }
 
 setMode('image');
 </script>
-</body>
-</html>
-  <p>This is a test page to confirm GitHub Pages is working.</p>
 </body>
 </html>
